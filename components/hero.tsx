@@ -23,18 +23,18 @@ export default function Hero({ section }: { section: Section }) {
 
   const sectionConfig = {
     office: {
-      title: "THE OFFICE",
+      title: "FOURWINDS LAGOS",
       gradient: "from-amber-200 to-amber-500",
       buttonBg: "bg-amber-500 hover:bg-amber-400",
       accentColor: "text-amber-500",
-      tagline: "Calm | Cozy | Warm",
+      tagline: "Pure Joy",
     },
     club: {
-      title: "THE CLUB",
+      title: "FOURWINDS LAGOS",
       gradient: "from-amber-200 to-amber-500",
       buttonBg: "bg-amber-500 hover:bg-amber-400",
       accentColor: "text-amber-500",
-      tagline: "Energetic | Vibrant | Outdoor Lounge",
+      tagline: "Pure Joy",
     },
   }
 

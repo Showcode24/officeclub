@@ -63,7 +63,7 @@ export default function MobileNav({
     <div className="flex items-center space-x-3 sm:space-x-4 flex-shrink-0 order-2 sm:order-2">
       <Image 
         src="/images/fourwinds logo.png" 
-        alt="FOURWIND | GRILL HOUSE | SPORTS | THE CLUB Logo" 
+        alt="FOURWIND | GRILL HOUSE | SPORTS | FOURWINDS LAGOS Logo" 
         width={250} 
         height={250}
         className="w-24 h-24 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 object-contain"

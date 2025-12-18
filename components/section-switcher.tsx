@@ -25,10 +25,10 @@ export default function SectionSwitcher() {
               ? "bg-amber-500 text-black font-medium shadow-lg shadow-amber-500/20"
               : "text-zinc-400 hover:text-white"
           }`}
-          aria-label="Switch to The Office"
+          aria-label="Switch to FOURWINDS LAGOS"
         >
           <Building2 size={18} />
-          <span className="text-sm font-medium">The Office</span>
+          <span className="text-sm font-medium">FOURWINDS LAGOS</span>
         </button>
         <button
           onClick={() => handleSectionChange("club")}
@@ -37,10 +37,10 @@ export default function SectionSwitcher() {
               ? "bg-purple-500 text-white font-medium shadow-lg shadow-purple-500/20"
               : "text-zinc-400 hover:text-white"
           }`}
-          aria-label="Switch to The Club"
+          aria-label="Switch to FOURWINDS LAGOS"
         >
           <PartyPopper size={18} />
-          <span className="text-sm font-medium">The Club</span>
+          <span className="text-sm font-medium">FOURWINDS LAGOS</span>
         </button>
       </div>
     </div>

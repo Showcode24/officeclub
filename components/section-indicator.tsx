@@ -10,13 +10,13 @@ interface SectionIndicatorProps {
 export default function SectionIndicator({ section }: SectionIndicatorProps) {
   const sectionConfig = {
     office: {
-      title: "The Office",
+      title: "FOURWINDS LAGOS",
       subtitle: "Indoor Dining Experience",
       className: "bg-amber-900/20 border-amber-700/30",
       textClassName: "text-amber-400",
     },
     club: {
-      title: "The Club",
+      title: "FOURWINDS LAGOS",
       subtitle: "Outdoor Lounge & Club",
       className: "bg-amber-900/20 border-amber-700/30",
       textClassName: "text-amber-400",
