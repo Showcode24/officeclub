@@ -1,94 +1,72 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
-import MobileNav from "@/components/mobile-nav"
+import { useState } from "react"
 import Hero from "@/components/hero"
+import CategorySelector from "@/components/category-selector"
+import MobileNav from "@/components/mobile-nav"
 import MenuSection from "@/components/menu-section"
-import Footer from "@/components/footer"
-import OnboardingTour from "@/components/onboarding-tour"
-import SearchOverlay from "@/components/search-overlay"
-import LoadingScreen from "@/components/loading-screen"
-import SectionIndicator from "@/components/section-indicator"
 import { drinks, categoryDisplayNames } from "@/lib/data"
-import type { DrinkCategory, Section } from "@/lib/types"
-import { getActiveSection, filterMenuBySection, getCategoriesForSection } from "@/lib/utils/section-helpers"
+import type { Section, DrinkCategory } from "@/lib/types"
 
-function HomeContent() {
-  const searchParams = useSearchParams()
-  const section: Section = getActiveSection(searchParams?.toString() || "")
-
+export default function Page() {
+  const [section] = useState<Section>("office")
   const [selectedCategory, setSelectedCategory] = useState<DrinkCategory | null>(null)
+  const [isCategorySelectorOpen, setIsCategorySelectorOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
 
-  const sectionDrinks = filterMenuBySection(drinks, section)
+  const categories = Object.keys(categoryDisplayNames) as DrinkCategory[]
 
-  const availableCategories = getCategoriesForSection(drinks, section)
-  const categories: DrinkCategory[] = availableCategories as DrinkCategory[]
+  // Filter drinks by section and optionally by category
+  const filteredDrinks = drinks.filter((drink) => {
+    if (!drink.availableIn.includes(section)) return false
+    if (selectedCategory && drink.category !== selectedCategory) return false
+    return true
+  })
 
-  useEffect(() => {
-    if (!selectedCategory && categories.length > 0) {
-      setSelectedCategory(categories[0])
-    }
-  }, [categories, selectedCategory])
+  const handleOpenCategorySelector = () => {
+    setIsCategorySelectorOpen(true)
+  }
 
-  const filteredDrinks = selectedCategory ? sectionDrinks.filter((d) => d.category === selectedCategory) : []
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 2500)
-    return () => clearTimeout(timer)
-  }, [])
-
-  useEffect(() => {
-    if (categories.length > 0) {
-      setSelectedCategory(categories[0])
-    }
-  }, [section])
+  const handleSelectCategory = (category: DrinkCategory) => {
+    setSelectedCategory(category)
+    // Scroll to menu section after a short delay
+    setTimeout(() => {
+      document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })
+    }, 300)
+  }
 
   const handleOpenSearch = () => {
     setIsSearchOpen(true)
   }
 
-  if (isLoading) {
-    return <LoadingScreen />
-  }
-
-  const sectionClassName = section === "office" ? "section-office" : "section-club"
-
   return (
-    <main className={`min-h-screen bg-black text-white ${sectionClassName}`}>
-      <MobileNav
+    <main className="min-h-screen bg-black text-white">
+      <div className="pt-32 sm:pt-0">
+        <MobileNav
+          categories={categories}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          onOpenSearch={handleOpenSearch}
+          categoryDisplayNames={categoryDisplayNames}
+          isMenuOpen={isMenuOpen}
+          setIsMenuOpen={setIsMenuOpen}
+        />
+
+        <Hero section={section} onOpenCategorySelector={handleOpenCategorySelector} />
+      </div>
+
+      <CategorySelector
+        isOpen={isCategorySelectorOpen}
+        onClose={() => setIsCategorySelectorOpen(false)}
         categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        onOpenSearch={handleOpenSearch}
+        onSelectCategory={handleSelectCategory}
         categoryDisplayNames={categoryDisplayNames}
       />
 
-      <SectionIndicator section={section} />
-
-      <Hero section={section} />
-
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <MenuSection drinks={filteredDrinks} section={section} />
       </div>
-
-      <Footer />
-
-      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} section={section} />
-
-      <OnboardingTour />
     </main>
-  )
-}
-
-export default function Home() {
-  return (
-    <Suspense fallback={<LoadingScreen />}>
-      <HomeContent />
-    </Suspense>
   )
 }

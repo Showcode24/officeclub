@@ -4,10 +4,15 @@ import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { ChevronDown } from "lucide-react"
-import Image from "next/image"
 import type { Section } from "@/lib/types"
 
-export default function Hero({ section }: { section: Section }) {
+export default function Hero({
+  section,
+  onOpenCategorySelector,
+}: {
+  section: Section
+  onOpenCategorySelector: () => void
+}) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true })
 
@@ -19,6 +24,10 @@ export default function Hero({ section }: { section: Section }) {
 
   const scrollToMenu = () => {
     document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  const handleViewMenu = () => {
+    onOpenCategorySelector()
   }
 
   const sectionConfig = {
@@ -49,7 +58,7 @@ export default function Hero({ section }: { section: Section }) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black"></div>
       </div>
 
-      <div className="relative z-10 text-center px-6 max-w-md mx-auto">
+      <div className="relative z-10 text-center px-6 mx-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
@@ -65,7 +74,7 @@ export default function Hero({ section }: { section: Section }) {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className={`text-4xl md:text-5xl font-bold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r ${config.gradient}`}
+          className={`text-2xl md:text-5xl font-bold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r whitespace-nowrap ${config.gradient}`}
         >
           {config.title}
         </motion.h1>
@@ -93,7 +102,7 @@ export default function Hero({ section }: { section: Section }) {
           className="flex justify-center"
         >
           <button
-            onClick={scrollToMenu}
+            onClick={handleViewMenu}
             className={`inline-flex items-center px-8 py-3 ${config.buttonBg} text-black font-medium rounded-full transition-all duration-300 transform hover:scale-105`}
           >
             View Menu

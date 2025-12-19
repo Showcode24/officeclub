@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Search } from "lucide-react"
+import { Menu, X, Search, ChevronDown } from "lucide-react"
 import type { DrinkCategory } from "@/lib/types"
 import { drinks } from "@/lib/data"
 import Image from "next/image"
@@ -13,6 +13,8 @@ interface MobileNavProps {
   setSelectedCategory: (category: DrinkCategory) => void
   onOpenSearch: () => void
   categoryDisplayNames: Record<string, string>
+  isMenuOpen: boolean
+  setIsMenuOpen: (open: boolean) => void
 }
 
 export default function MobileNav({
@@ -21,9 +23,10 @@ export default function MobileNav({
   setSelectedCategory,
   onOpenSearch,
   categoryDisplayNames,
+  isMenuOpen,
+  setIsMenuOpen,
 }: MobileNavProps) {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,61 +53,91 @@ export default function MobileNav({
           isScrolled ? "bg-black/90 backdrop-blur-md shadow-md" : "bg-transparent"
         }`}
       >
-<div className="container mx-auto px-4 sm:px-6">
-  <div className="flex flex-col sm:flex-row items-center justify-between py-3 sm:py-0 sm:h-16 gap-2 sm:gap-4">
-    <motion.h1 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
-      className="text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-xl font-bold text-amber-500 text-center sm:text-left whitespace-nowrap order-1 sm:order-1"
-    >
-      FOURWINDS LAGOS | GRILL HOUSE | SPORT BAR | NIGHT CLUB
-    </motion.h1>
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between py-2 sm:py-0 sm:h-16 gap-1 sm:gap-4">
+            {/* Styling the brand tagline to be white, smaller, and cleaner for better UI/UX */}
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-[9px] xs:text-[10px] sm:text-xs md:text-sm lg:text-base font-medium tracking-[0.15em] uppercase text-center sm:text-left whitespace-nowrap order-1 sm:order-1"
+            >
+              <span className="text-amber-500">FOURWINDS LAGOS</span>
+              <span className="text-white/60"> | GRILL HOUSE | SPORT BAR | NIGHT CLUB</span>
+            </motion.h1>
 
-    <div className="flex items-center space-x-3 sm:space-x-4 flex-shrink-0 order-2 sm:order-2">
-      <Image 
-        src="/images/fourwinds logo.png" 
-        alt="FOURWIND | GRILL HOUSE | SPORTS | FOURWINDS LAGOS Logo" 
-        width={250} 
-        height={250}
-        className="w-24 h-24 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 object-contain"
-      />
-      <button
-        onClick={onOpenSearch}
-        className="search-bar p-2 text-zinc-400 hover:text-amber-500 transition-colors"
-        aria-label="Search"
-      >
-        <Search className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-      </button>
-      <button
-        onClick={() => setIsMenuOpen(true)}
-        className="p-2 text-zinc-400 hover:text-amber-500 transition-colors"
-        aria-label="Open menu"
-      >
-        <Menu className="w-6 h-6 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-      </button>
-    </div>
-  </div>
-</div>
+            <div className="flex items-center space-x-3 sm:space-x-4 flex-shrink-0 order-2 sm:order-2">
+              <div className="relative w-28 h-20 xs:w-32 xs:h-32 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32">
+                <Image src="/images/fourwinds logo.png" alt="FOURWINDS Logo" fill className="object-contain" priority />
+              </div>
+              <button
+                onClick={onOpenSearch}
+                className="search-bar p-2 text-zinc-400 hover:text-amber-500 transition-colors"
+                aria-label="Search"
+              >
+                <Search className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              </button>
+              <button
+                onClick={() => setIsMenuOpen(true)}
+                className="p-2 text-zinc-400 hover:text-amber-500 transition-colors"
+                aria-label="Open menu"
+              >
+                <Menu className="w-6 h-6 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+              </button>
+            </div>
+          </div>
+        </div>
       </header>
 
       <div
-        className={`fixed top-16 left-0 right-0 z-30 transition-all duration-300 ${
+        className={`fixed top-24 sm:top-16 left-0 right-0 z-30 transition-all duration-300 ${
           isScrolled ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
-        } bg-zinc-900/90 backdrop-blur-md shadow-md py-3`}
+        } bg-gradient-to-b from-zinc-900 to-zinc-900/95 backdrop-blur-lg shadow-lg border-b border-amber-500/20`}
       >
-        <div className="container mx-auto px-4">
-          <div className="category-menu flex overflow-x-auto scrollbar-hide space-x-2 pb-1">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm transition-all ${
-                  selectedCategory === category ? "bg-amber-500 text-black font-medium" : "bg-zinc-800 text-zinc-400"
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-4">
+            {/* Selected category indicator on desktop */}
+            <div className="hidden lg:flex items-center space-x-2">
+              <span className="text-xs uppercase tracking-wider text-zinc-500 font-medium">Browsing:</span>
+              <span className="text-amber-500 font-semibold text-sm">
+                {selectedCategory ? categoryDisplayNames[selectedCategory] : "All Categories"}
+              </span>
+            </div>
+
+            {/* Category menu */}
+            <div className="category-menu flex-1 flex overflow-x-auto scrollbar-hide gap-2 pb-1 -mb-1">
+              {/* <button
+                onClick={() => setSelectedCategory(null)}
+                className={`px-4 py-2 rounded-lg whitespace-nowrap text-sm font-medium transition-all flex-shrink-0 ${
+                  selectedCategory === null
+                    ? "bg-gradient-to-r from-amber-500 to-amber-600 text-black shadow-lg shadow-amber-500/30"
+                    : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-700 hover:text-amber-500"
                 }`}
               >
-                {categoryDisplayNames[category] || category}
-              </button>
-            ))}
+                <span>All</span>
+              </button> */}
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-lg whitespace-nowrap text-sm font-medium transition-all flex-shrink-0 ${
+                    selectedCategory === category
+                      ? "bg-gradient-to-r from-amber-500 to-amber-600 text-black shadow-lg shadow-amber-500/30"
+                      : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-700 hover:text-amber-500"
+                  }`}
+                >
+                  {categoryDisplayNames[category] || category}
+                </button>
+              ))}
+            </div>
+
+            {/* View all categories button on desktop */}
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="hidden lg:flex items-center space-x-1 px-4 py-2 rounded-lg bg-zinc-800/80 text-zinc-400 hover:bg-zinc-700 hover:text-amber-500 transition-all text-sm font-medium"
+            >
+              <span>View All</span>
+              <ChevronDown className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>
