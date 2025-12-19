@@ -1,10 +1,10 @@
 "use client"
-//New Addtiion
-import { useEffect, useRef } from "react"
+
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { ChevronDown } from "lucide-react"
 import type { Section } from "@/lib/types"
+import Image from "next/image"
 
 export default function Hero({
   section,
@@ -13,14 +13,7 @@ export default function Hero({
   section: Section
   onOpenCategorySelector: () => void
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null)
   const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true })
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 0.7
-    }
-  }, [])
 
   const scrollToMenu = () => {
     document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })
@@ -37,6 +30,7 @@ export default function Hero({
       buttonBg: "bg-amber-500 hover:bg-amber-400",
       accentColor: "text-amber-500",
       tagline: "Pure Joy",
+      image: "/images/hero-image.jpg",
     },
     club: {
       title: "FOURWINDS LAGOS",
@@ -44,6 +38,7 @@ export default function Hero({
       buttonBg: "bg-amber-500 hover:bg-amber-400",
       accentColor: "text-amber-500",
       tagline: "Pure Joy",
+      image: "/images/hero-image.jpg",
     },
   }
 
@@ -52,21 +47,25 @@ export default function Hero({
   return (
     <div ref={ref} className="relative h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <video ref={videoRef} autoPlay muted loop playsInline className="object-cover w-full h-full opacity-40">
-          <source src="/videos/bar-ambiance.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black"></div>
+        <Image
+          src={config.image || "/placeholder.svg"}
+          alt="Luxury Ambience"
+          fill
+          priority
+          className="object-cover opacity-60 transition-transform duration-1000 scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
       </div>
 
-      <div className="relative z-10 text-center px-6 mx-auto">
+      <div className="relative z-10 text-center px-6 mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-6"
+          className="mb-8"
         >
-          {/* <div className="w-20 h-20 mx-auto mb-4">
-            <Image src="/images/fourwinds logo.png" alt="FOURWINDS LAGOS | GRILL HOUSE | SPORT BAR | NIGHT CLUB Logo" width={100} height={100} />
+          {/* <div className="relative w-24 h-24 mx-auto mb-6">
+            <Image src="/luxury-logo.jpg" alt="Logo" fill className="object-contain" />
           </div> */}
         </motion.div>
 
@@ -74,23 +73,23 @@ export default function Hero({
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className={`text-2xl md:text-5xl font-bold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r whitespace-nowrap ${config.gradient}`}
+          className={`text-4xl md:text-7xl font-bold mb-6 tracking-tight text-transparent bg-clip-text bg-gradient-to-r ${config.gradient}`}
         >
           {config.title}
         </motion.h1>
 
         <motion.div
           initial={{ opacity: 0, width: 0 }}
-          animate={inView ? { opacity: 1, width: "100px" } : { opacity: 0, width: 0 }}
+          animate={inView ? { opacity: 1, width: "120px" } : { opacity: 0, width: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="h-px bg-amber-500 mx-auto mb-6"
+          className="h-1 bg-amber-500 mx-auto mb-8 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.5)]"
         ></motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-xl font-light mb-8 text-zinc-300"
+          className="text-xl md:text-2xl font-light mb-10 text-zinc-100 uppercase tracking-[0.2em]"
         >
           {config.tagline}
         </motion.p>
@@ -103,9 +102,9 @@ export default function Hero({
         >
           <button
             onClick={handleViewMenu}
-            className={`inline-flex items-center px-8 py-3 ${config.buttonBg} text-black font-medium rounded-full transition-all duration-300 transform hover:scale-105`}
+            className={`inline-flex items-center px-10 py-4 ${config.buttonBg} text-black font-bold text-lg rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_25px_rgba(245,158,11,0.4)]`}
           >
-            View Menu
+            VIEW MENU
           </button>
         </motion.div>
       </div>
@@ -114,10 +113,10 @@ export default function Hero({
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 0.7 } : { opacity: 0 }}
         transition={{ duration: 1, delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-12 left-1/2 transform -translate-x-1/2"
       >
-        <button onClick={scrollToMenu} className="animate-bounce p-2" aria-label="Scroll down">
-          <ChevronDown className={config.accentColor} size={28} />
+        <button onClick={scrollToMenu} className="animate-bounce p-3 group" aria-label="Scroll down">
+          <ChevronDown className={`${config.accentColor} transition-transform group-hover:scale-110`} size={32} />
         </button>
       </motion.div>
     </div>
