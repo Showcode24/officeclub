@@ -10,7 +10,7 @@ export default function Hero({
   section,
   onOpenCategorySelector,
 }: {
-  section: Section
+  section: Section | null
   onOpenCategorySelector: () => void
 }) {
   const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true })
@@ -41,6 +41,8 @@ export default function Hero({
       image: "/images/hero-image.jpg",
     },
   }
+
+  if (!section) return null
 
   const config = sectionConfig[section]
 

@@ -9,7 +9,7 @@ import { drinks, categoryDisplayNames } from "@/lib/data"
 import type { Section, DrinkCategory } from "@/lib/types"
 
 export default function Page() {
-  const [section] = useState<Section>("office")
+  const [section] = useState<Section>("club")
   const [selectedCategory, setSelectedCategory] = useState<DrinkCategory | null>(null)
   const [isCategorySelectorOpen, setIsCategorySelectorOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
